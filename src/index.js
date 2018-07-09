@@ -1,70 +1,114 @@
-import React, { Component } from 'react';
-import { render } from 'react-dom';
-import L from 'leaflet'
+import React, {Component} from 'react';
+import {render} from 'react-dom';
 import { Map, TileLayer as Basemap } from 'react-leaflet';
 import carto from 'carto.js';
-import Layer from './components/Layer';
 import airbnb from './data/airbnb';
-import utils from './utils/index';
+import L from 'leaflet';
+import {busdata} from './data/busstop.geojson';
 import './index.css';
+import axios from 'axios';
 
-var dataview = 'E:\Orbital\dataset\Bus stops in Singapore.csv';
 var CARTO_BASEMAP = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png';
-//const CARTO_BASEMAP = L.map('map').setView([50, 15], 4);
+//console.log(busdata);
+//var busdata = require('./data/busstop.geojson');
 
-class App extends Component {
-  state = {
-    center: [1.3521, 103.8198],
-    zoom: 12,
-    nativeMap: undefined,
-    layerStyle: airbnb.style,
-    hidelayers: true
-  }
+//var busdata = axios.get('./data/busstop.geojson')
 
-  cartoClient = new carto.Client({ apiKey: 'cefaa4464d8aba5e9a3afff2d22cea54e15990c2', username: 'wesleynsc' });
+//var test = isAuth();
+console.log(busdata);
 
-  dataset = new carto.source.Dataset('european_cities');
+var testtest = 
+	{
+		"type": "FeatureCollection",
+		"features": [
+	   {
+		 "type": "Feature",
+		 "geometry": {
+			"type": "Point",
+			"coordinates":  [ 103.817225,1.282102 ]
+		 },
+		 "properties": {
+		 "name":"Bt Merah Int",
+		 "id":10009
+		 }
+	   },
+	   {
+		 "type": "Feature",
+		 "geometry": {
+			"type": "Point",
+			"coordinates":  [ 103.837497,1.277738 ]
+		 },
+		 "properties": {
+		 "name":"Opp New Bridge Rd Ter",
+		 "id":10011
+		 }
+	   },
+	   {
+		 "type": "Feature",
+		 "geometry": {
+			"type": "Point",
+			"coordinates":  [ 103.837626,1.27832 ]
+		 },
+		 "properties": {
+		 "name":"Aft Hosp Dr",
+		 "id":10017
+		 }
+	   },
+	   {
+		 "type": "Feature",
+		 "geometry": {
+			"type": "Point",
+			"coordinates":  [ 103.838604,1.279008 ]
+		 },
+		 "properties": {
+		 "name":"Bef Outram Rd",
+		 "id":10018
+		 }
+	   }
+	]
+}
+;
 
-  cartoClient.addLayer(Layer)
-   .then(() => {
-   console.log('Layer added');
- })
- .catch(cartoError => {
-   console.error(cartoError.message);
- });
+class App extends Component{
+
+state = {
+  center: [1.3521, 103.8198],
+  zoom: 13,
+  nativeMap: undefined,
+  layerStyle: airbnb.style,
+  hidelayers: true
+}
+
+cartoClient = new carto.Client({
+		apiKey: 'cefaa4464d8aba5e9a3afff2d22cea54e15990c2',
+		username: 'wesleynsc'
+	})
+	
+	componentDidMount(){
+		
+		this.setState({ nativeMap: this.nativeMap });
+		L.geoJSON(testtest).addTo(this.nativeMap);
+		
+	}
 
 
-  componentDidMount() {
-    this.setState({ nativeMap: this.nativeMap });
-  }
-
-  handleClick = (e) => {
-    this.addMarker();
-  }
-
-
-  render() {
-    const { center, nativeMap, zoom } = this.state;
-
-    return (
-      <main>
-        <Map center={center} zoom={zoom} ref={node => { this.nativeMap = node && node.leafletElement }}>
-          <Basemap attribution="" url={CARTO_BASEMAP} />
-
-          <Layer
-            source={airbnb.source}
-            style={this.state.layerStyle}
-            client={this.cartoClient}
-            hidden={this.state.hidelayers}
-          />
-        </Map>
-
-      
-      </main>
-    );
-  }
-
+	render(){
+		const { center, nativeMap, zoom } = this.state;
+		return (
+		<main>
+			<Map 
+				center = {center}
+				zoom = {zoom}
+				ref = {node => {this.nativeMap = node && node.leafletElement}}>
+			<Basemap 
+				attribution = ""
+				url = {CARTO_BASEMAP} />
+			</Map>	
+		</main>
+		);
+	}
 
 }
+
 
 render(<App />, document.getElementById('root'));
