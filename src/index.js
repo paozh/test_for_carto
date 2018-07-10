@@ -4,73 +4,23 @@ import { Map, TileLayer as Basemap } from 'react-leaflet';
 import carto from 'carto.js';
 import airbnb from './data/airbnb';
 import L from 'leaflet';
-import {busdata} from './data/busstop.geojson';
 import './index.css';
-import axios from 'axios';
+import current_BTO from './data/Current BTO.json';
 
 var CARTO_BASEMAP = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png';
-//console.log(busdata);
-//var busdata = require('./data/busstop.geojson');
 
-//var busdata = axios.get('./data/busstop.geojson')
+var polygonLayer = [];
 
-//var test = isAuth();
-console.log(busdata);
-
-var testtest = 
-	{
-		"type": "FeatureCollection",
-		"features": [
-	   {
-		 "type": "Feature",
-		 "geometry": {
-			"type": "Point",
-			"coordinates":  [ 103.817225,1.282102 ]
-		 },
-		 "properties": {
-		 "name":"Bt Merah Int",
-		 "id":10009
-		 }
-	   },
-	   {
-		 "type": "Feature",
-		 "geometry": {
-			"type": "Point",
-			"coordinates":  [ 103.837497,1.277738 ]
-		 },
-		 "properties": {
-		 "name":"Opp New Bridge Rd Ter",
-		 "id":10011
-		 }
-	   },
-	   {
-		 "type": "Feature",
-		 "geometry": {
-			"type": "Point",
-			"coordinates":  [ 103.837626,1.27832 ]
-		 },
-		 "properties": {
-		 "name":"Aft Hosp Dr",
-		 "id":10017
-		 }
-	   },
-	   {
-		 "type": "Feature",
-		 "geometry": {
-			"type": "Point",
-			"coordinates":  [ 103.838604,1.279008 ]
-		 },
-		 "properties": {
-		 "name":"Bef Outram Rd",
-		 "id":10018
-		 }
-	   }
-	]
+// to create a current BTO layer from data (geojson file format actually)
+for (var key in current_BTO.features){
+	const coordinates = current_BTO.features[key].geometry.coordinates;
+	polygonLayer.push(coordinates);
+	//console.log(polygonLayer);
 }
-;
 
 class App extends Component{
 
+// create state
 state = {
   center: [1.3521, 103.8198],
   zoom: 13,
@@ -85,9 +35,10 @@ cartoClient = new carto.Client({
 	})
 	
 	componentDidMount(){
-		
+		// set state of map
 		this.setState({ nativeMap: this.nativeMap });
-		L.geoJSON(testtest).addTo(this.nativeMap);
+		// add the polygon layer to map
+		L.polygon(polygonLayer, {colour: 'red'}).addTo(this.nativeMap);
 		
 	}
 
