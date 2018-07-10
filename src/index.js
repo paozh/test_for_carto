@@ -6,6 +6,7 @@ import airbnb from './data/airbnb';
 import L from 'leaflet';
 import './index.css';
 import current_BTO from './data/Current BTO.json';
+import testtest from './data/busstop.json';
 
 var CARTO_BASEMAP = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png';
 
@@ -14,6 +15,7 @@ var polygonLayer = [];
 // to create a current BTO layer from data (geojson file format actually)
 for (var key in current_BTO.features){
 	const coordinates = current_BTO.features[key].geometry.coordinates;
+	const name = current_BTO.features[key].properties[name];
 	polygonLayer.push(coordinates);
 	//console.log(polygonLayer);
 }
@@ -37,9 +39,11 @@ cartoClient = new carto.Client({
 	componentDidMount(){
 		// set state of map
 		this.setState({ nativeMap: this.nativeMap });
-		// add the polygon layer to map
-		L.polygon(polygonLayer, {colour: 'red'}).addTo(this.nativeMap);
-		
+		L.geoJSON(current_BTO, {
+		onEachFeature: function (f, l) {
+		  l.bindPopup('<pre>'+JSON.stringify(f.properties,null,' ').replace(/[\{\}"]/g,'')+'</pre>');
+		}
+	   }).addTo(this.nativeMap);	
 	}
 
 
