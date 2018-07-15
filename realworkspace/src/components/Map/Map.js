@@ -2,25 +2,36 @@ import React from 'react';
 import { Map, TileLayer} from 'react-leaflet';
 import './Map.css';
 import carto from '@carto/carto.js';
-import L from 'leaflet';
-
+import Layer from './Layer';
 
 var CARTO_BASEMAP = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png';
 
-class Map extends React.Component {
+var client = new carto.Client({
+	apiKey: 'cefaa4464d8aba5e9a3afff2d22cea54e15990c2',
+	username: 'wesleynsc'
+});
+
+var source = new carto.source.Dataset(`bus_stops_in_singapore`);
+var style = new carto.style.CartoCSS(`
+	#layer {
+		marker-width: 9;
+		marker-fill: #EE4D5A;
+		marker-line-color: #FFFFFF;
+	}
+`);
+
+
+class MapExample extends React.Component {
 
     state = {
         center: [1.3521, 103.8198],
         zoom: 13,
         nativeMap: undefined,
-        layerStyle: MapStyle.style,
+        layerStyle: null,
         hidelayers: true
     }    
 
-    client = new carto.Client({
-		apiKey: 'cefaa4464d8aba5e9a3afff2d22cea54e15990c2',
-		username: 'wesleynsc'
-    });
+
 
     componentDidMount(){
 	// 	// set state of map
@@ -31,11 +42,8 @@ class Map extends React.Component {
 	// 	  l.bindPopup('<pre>'+JSON.stringify(f.properties,null,' ').replace(/["]/g,'')+'</pre>');
 	// 	}
     //    }).addTo(this.nativeMap);	
-    
 
-
-
-
+        this.setState({nativeMap: this.nativeMap});
 	}
 
 
@@ -50,6 +58,7 @@ class Map extends React.Component {
 			<TileLayer 
 				attribution = ""
 				url = {CARTO_BASEMAP} />
+			<Layer source={source} style={style} hidden={true} client={client}/>
 			</Map>	
 		</main>
 		);
@@ -61,4 +70,4 @@ class Map extends React.Component {
 
 
 
-export default Map;
+export default MapExample;
