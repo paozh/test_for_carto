@@ -4,6 +4,7 @@ import './Map.css';
 import carto from '@carto/carto.js';
 import LayerSQL from './LayerSQL';
 import LayerData from './LayerDataset';
+import BusLayer from './Layers/BusLayer';
 
 var CARTO_BASEMAP = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png';
 
@@ -25,44 +26,33 @@ var sourceBus = 'SELECT * FROM busstop';
 // var sourceShopping;
 // var sourceSchool; 
 
+var bounds = [[1.1962530584216953,103.58157000878907], [1.4873106102494986,104.04299579003907]]; 
 
 class MapExample extends React.Component {
 
     state = {
-        center: [1.3521, 103.8198],
-        zoom: 13
+	    center: [1.355075, 103.600494],
+        zoom: 12
 	}    
-	
-    // componentDidMount(){
-	// // 	// set state of map
-    // //     this.setState({ nativeMap: this.nativeMap });
-    // //     // create layer base on current_BTO and to create pop up based on it
-	// // 	L.geoJSON(current_BTO, {
-	// // 	onEachFeature: function (f, l) {
-	// // 	  l.bindPopup('<pre>'+JSON.stringify(f.properties,null,' ').replace(/["]/g,'')+'</pre>');
-	// // 	}
-    // //    }).addTo(this.nativeMap);	
-		
-	// 	this.setState({nativeMap: this.nativeMap});
-	// 	console.log("print in map.js");
-	// }
 
 	render(){
 		const { center, zoom } = this.state;
 		return (
 		<div>
 			<Map id="mapid"
-				center = {[1.3521, 103.8198]}
-				zoom = {13}>
+				center = {center}
+				zoom = {zoom}
+				animate={true}
+				>
 			<TileLayer 
 				attribution = "Input value in TileLayer: Attribution"
 				url = {CARTO_BASEMAP} />
-			<LayerSQL source={sourceBus} style={style} hidden={false} client={client}/>
-				<Layer source={busstop} style={} hidden={false} client={client}/>
-				<Layer source={mrt} style={} hidden={false} client={client}/>
-				<Layer source={shopping} style={} hidden={false} client={client}/>
-				<Layer source={hawkers} style={} hidden={false} client={client}/>
-				<Layer source={schools} style={} hidden={false} client={client}/>
+				<BusLayer style={style} client={client} hidden={false}/>
+			{/* <LayerSQL source={sourceBus} style={style} hidden={false} client={client}/> */}
+				{/* <Layer source={sourceMRT} style={} hidden={false} client={client}/>
+				<Layer source={sourceHawker} style={} hidden={false} client={client}/>
+				<Layer source={sourceSchool} style={} hidden={false} client={client}/>
+				<Layer source={sourceShopping} style={} hidden={false} client={client}/> */}
 			</Map>	
 		</div>
 		);

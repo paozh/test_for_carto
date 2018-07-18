@@ -4,7 +4,6 @@ import Map from './components/Map/Map';
 import NavBar from './components/NavBar/NavBar';
 import NavCol from './components/NavCol/NavCol';
 import CheckBoxes from './components/NavCol/CheckBoxes/CheckBoxes';
-import Test from './components/Map/test';
 
 export default class App extends Component {
   render() {
