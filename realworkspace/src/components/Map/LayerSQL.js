@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import carto from 'carto.js';
+import carto from '@carto/carto.js';
 
 class Layer extends Component {
   static contextTypes = {
@@ -28,8 +28,7 @@ class Layer extends Component {
 
   componentDidMount() {
     const { client } = this.props;
-
-    client.addLayer(this.layer); // this may have to be placed in the constructor
+    client.addLayer(this.layer);
     client.getLeafletLayer().addTo(this.context.map);
   }
 
