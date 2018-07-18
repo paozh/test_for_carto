@@ -58,11 +58,11 @@ class MapExample extends React.Component {
 				attribution = "Input value in TileLayer: Attribution"
 				url = {CARTO_BASEMAP} />
 			<LayerSQL source={sourceBus} style={style} hidden={false} client={client}/>
-				{/* <Layer source={busstop} style={} hidden={false} client={client}/>
+				<Layer source={busstop} style={} hidden={false} client={client}/>
 				<Layer source={mrt} style={} hidden={false} client={client}/>
 				<Layer source={shopping} style={} hidden={false} client={client}/>
 				<Layer source={hawkers} style={} hidden={false} client={client}/>
-				<Layer source={schools} style={} hidden={false} client={client}/> */}
+				<Layer source={schools} style={} hidden={false} client={client}/>
 			</Map>	
 		</div>
 		);
