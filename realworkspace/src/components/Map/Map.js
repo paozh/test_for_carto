@@ -27,8 +27,6 @@ var BTOstyle = `
 	}
 `;
 
-
-
 // Initial boundaries set for panning, [LEFT CORNER, RIGHT CORNER] (longitude, latitude) OR (y,x)
 var bounds = [[1.2462530584216953,103.17157000878907], [1.4573106102494986,104.02299579003907]]; 
 
@@ -42,10 +40,13 @@ class MapExample extends React.Component {
 		minZoom: 12,
 	}    
 
-	mapRef = createRef()
+	componentDidMount() {
+		this.mapRef = this.refs.map.leafletElement; // <= this is the Leaflet Map object
+	}
 
 	handleReset = () => {
-		this.mapRef.current.leafletElement.flyToBounds(bounds);
+		console.log("flying");
+		this.mapRef.flyToBounds(bounds);
 	}
 
 	render(){
@@ -59,7 +60,7 @@ class MapExample extends React.Component {
 		return (
 		<div>
 			{/* Must have id="mapid" */}
-			<Map id="mapid"
+			<Map ref="map" id="mapid"
 				center = {center}
 				zoom = {zoom}
 				animate={true}

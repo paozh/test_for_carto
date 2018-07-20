@@ -14,7 +14,7 @@ export default class App extends Component {
   }
 
   resetHandler = () => {
-    console.log("reset happened");
+    console.log("reset happening");
     this.setState( {
       shouldReset: true
     })
@@ -38,7 +38,7 @@ export default class App extends Component {
             {/* <NavCol>
               <CheckBoxes/>
               </NavCol> */}
-            <Map shouldReset={this.state.shouldReset} resetClosure={this.resetClosure}/>
+            <Map shouldReset={this.state.shouldReset} resetClosure={() => this.resetClosure}/>
         </div>
       </div>
     );
