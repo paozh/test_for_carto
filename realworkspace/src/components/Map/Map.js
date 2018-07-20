@@ -1,19 +1,21 @@
 import React from 'react';
 import { Map, TileLayer} from 'react-leaflet';
 import './Map.css';
-import carto from '@carto/carto.js';
+import airbnb from './airbnb';
+import carto from 'carto.js';
+import current_BTO from '../../data/Current_BTO.json';
 import L from 'leaflet';
 
 
 var CARTO_BASEMAP = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png';
 
-class Map extends React.Component {
+class MapSG extends React.Component {
 
     state = {
         center: [1.3521, 103.8198],
         zoom: 13,
         nativeMap: undefined,
-        layerStyle: MapStyle.style,
+        layerStyle: airbnb.style,
         hidelayers: true
     }    
 
@@ -24,17 +26,13 @@ class Map extends React.Component {
 
     componentDidMount(){
 	// 	// set state of map
-    //     this.setState({ nativeMap: this.nativeMap });
+        this.setState({ nativeMap: this.nativeMap });
     //     // create layer base on current_BTO and to create pop up based on it
 	// 	L.geoJSON(current_BTO, {
 	// 	onEachFeature: function (f, l) {
 	// 	  l.bindPopup('<pre>'+JSON.stringify(f.properties,null,' ').replace(/["]/g,'')+'</pre>');
 	// 	}
     //    }).addTo(this.nativeMap);	
-    
-
-
-
 
 	}
 
@@ -61,4 +59,4 @@ class Map extends React.Component {
 
 
 
-export default Map;
+export default MapSG;

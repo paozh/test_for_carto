@@ -1,7 +1,6 @@
 {
     "name": "realworkspace",
     "version": "0.1.0",
-    "private": true,
     "dependencies": {
         "@carto/carto.js": "^4.0.15",
         "carto.js": "4.0.0-beta.4",
