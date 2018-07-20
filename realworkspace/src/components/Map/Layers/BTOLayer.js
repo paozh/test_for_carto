@@ -2,14 +2,13 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import carto from '@carto/carto.js';
 
-class BusLayer extends Component {
+class BTOLayer extends Component {
   static contextTypes = {
     map: PropTypes.object,
   };
 
   static propTypes = {
     source: PropTypes.string,
-    style: PropTypes.string,
     client: PropTypes.object,
     hidden: PropTypes.bool
   }
@@ -17,8 +16,11 @@ class BusLayer extends Component {
   constructor(props) {
     super(props);
 
-    const { client, hidden, style } = props;
-    const SQLquery = 'SELECT * FROM busstop_most_updated';
+    const { hidden, style } = props;
+
+    const SQLquery = 'SELECT * FROM current_bto';
+
+
     const cartoSource = new carto.source.SQL(SQLquery);
     const cartoStyle = new carto.style.CartoCSS(style);
 
@@ -50,4 +52,4 @@ class BusLayer extends Component {
   }
 }
 
-export default BusLayer;
+export default BTOLayer;
