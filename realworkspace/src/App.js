@@ -14,12 +14,10 @@ class App extends Component {
         </div>
 
         <div className="content-r"> 
-            <NavCol>
+            {/* <NavCol>
               <CheckBoxes/>
-              </NavCol>
-          <div className = "mapid">
+              </NavCol> */}
             <Map/>
-          </div>
         </div>
 
       </div>

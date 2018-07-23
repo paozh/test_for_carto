@@ -1,62 +1,64 @@
 import React from 'react';
 import { Map, TileLayer} from 'react-leaflet';
 import './Map.css';
-import airbnb from './airbnb';
-import carto from 'carto.js';
-import current_BTO from '../../data/Current_BTO.json';
-import L from 'leaflet';
-
+import carto from '@carto/carto.js';
+import LayerSQL from './LayerSQL';
+import LayerData from './LayerDataset';
+import BusLayer from './Layers/BusLayer';
+import District from './Layers/District';
 
 var CARTO_BASEMAP = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png';
 
-class MapSG extends React.Component {
+var client = new carto.Client({
+	apiKey: 'cefaa4464d8aba5e9a3afff2d22cea54e15990c2',
+	username: 'wesleynsc'
+});
+var style = `
+	#layer {
+		marker-width: 9;
+		marker-fill: #EE4D5A;
+		marker-line-color: #FFFFFF;
+	}
+`;
+
+var sourceBus = 'SELECT * FROM busstop';
+// var sourceMRT;
+// var sourceHawker;
+// var sourceShopping;
+// var sourceSchool; 
+
+var bounds = [[1.1962530584216953,103.58157000878907], [1.4873106102494986,104.04299579003907]]; 
+
+class MapExample extends React.Component {
 
     state = {
-        center: [1.3521, 103.8198],
-        zoom: 13,
-        nativeMap: undefined,
-        layerStyle: airbnb.style,
-        hidelayers: true
-    }    
-
-    client = new carto.Client({
-		apiKey: 'cefaa4464d8aba5e9a3afff2d22cea54e15990c2',
-		username: 'wesleynsc'
-    });
-
-    componentDidMount(){
-	// 	// set state of map
-        this.setState({ nativeMap: this.nativeMap });
-    //     // create layer base on current_BTO and to create pop up based on it
-	// 	L.geoJSON(current_BTO, {
-	// 	onEachFeature: function (f, l) {
-	// 	  l.bindPopup('<pre>'+JSON.stringify(f.properties,null,' ').replace(/["]/g,'')+'</pre>');
-	// 	}
-    //    }).addTo(this.nativeMap);	
-
-	}
-
+	    center: [1.355075, 103.600494],
+        zoom: 12
+	}    
 
 	render(){
-		const { center, nativeMap, zoom } = this.state;
+		const { center, zoom } = this.state;
 		return (
-		<main>
-			<Map 
+		<div>
+			<Map id="mapid"
 				center = {center}
 				zoom = {zoom}
-				ref = {node => {this.nativeMap = node && node.leafletElement}}>
+				animate={true}
+				>
 			<TileLayer 
-				attribution = ""
+				attribution = "Input value in TileLayer: Attribution"
 				url = {CARTO_BASEMAP} />
+				<BusLayer style={style} client={client} hidden={false}/>
+				<District style = {style} clien ={client} hidden = {false}/>
+			{/* <LayerSQL source={sourceBus} style={style} hidden={false} client={client}/> */}
+				{/* <Layer source={sourceMRT} style={} hidden={false} client={client}/>
+				<Layer source={sourceHawker} style={} hidden={false} client={client}/>
+				<Layer source={sourceSchool} style={} hidden={false} client={client}/>
+				<Layer source={sourceShopping} style={} hidden={false} client={client}/> */}
 			</Map>	
-		</main>
+		</div>
 		);
 	}
-    
-
 }
 
-
-
-
-export default MapSG;
+export default MapExample;
