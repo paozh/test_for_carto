@@ -1,11 +1,13 @@
-import React from 'react';
-import { Map, TileLayer} from 'react-leaflet';
+import React, {createRef} from 'react';
+import { Map, TileLayer, Popup,
+	 Marker, GeoJSON, LayersControl, LayerGroup} from 'react-leaflet';
 import './Map.css';
 import carto from '@carto/carto.js';
-import LayerSQL from './LayerSQL';
-import LayerData from './LayerDataset';
 import BusLayer from './Layers/BusLayer';
-import District from './Layers/District';
+import BTOdata from '../../data/Current_BTO.json';
+import BTOLayer from './Layers/BTOLayer';
+const { BaseLayer, Overlay} = LayersControl;
+
 
 var CARTO_BASEMAP = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png';
 
@@ -21,40 +23,127 @@ var style = `
 	}
 `;
 
-var sourceBus = 'SELECT * FROM busstop';
-// var sourceMRT;
-// var sourceHawker;
-// var sourceShopping;
-// var sourceSchool; 
+var BTOstyle = `
+	#layer {
+		polygon-fill: rgba(128, 128, 128, 1);
+		polygon-opacity: 1;
+	}
+`;
+//var popup = L.popup({closeButton:false});
+// Initial boundaries set for panning, [LEFT CORNER, RIGHT CORNER] (longitude, latitude) OR (y,x)
+var bounds = [[1.2462530584216953,103.17157000878907], [1.4573106102494986,104.02299579003907]]; 
 
-var bounds = [[1.1962530584216953,103.58157000878907], [1.4873106102494986,104.04299579003907]]; 
+
+
 
 class MapExample extends React.Component {
 
     state = {
-	    center: [1.355075, 103.600494],
-        zoom: 12
+	    center: [1.355075, 103.60494],
+		zoom: 12,
+		maxBounds: bounds,
+		maxZoom: 18,
+		minZoom: 12,
+		clicked: 0
 	}    
 
+	// create reference
+	mapRef = createRef();
+	
+	componentDidMount() {
+		//this.mapRef = this.refs.map.leafletElement; // <= this is the Leaflet Map object
+		console.log(this.refs);
+	}
+
+	componentDidUpdate(){
+		console.log(this.state.clicked);
+	}
+
+	// reset button
+	handleReset = () => {
+		console.log("flying");
+		this.mapRef.current.flyToBounds(bounds);
+	}
+
+	
+	// handle clicks
+	handleClick = () => {
+		this.mapRef.current.leafletElement.locate()
+	}
+
+	handleLocationFound = e => {
+		this.setState({
+		hasLocation: true,
+		latlng: e.latlng,
+		})
+	}
+
+	onClickPoly = () => {
+		this.setState({ clicked: this.state.clicked + 1 })
+	  }
+	
+	// on each feature function 
+	// used with GeoJSON
+	onEachFeature = (feature, layer) => {
+		layer.bindPopup(feature.properties.name);
+	}
+
 	render(){
-		const { center, zoom } = this.state;
+			// initialise data
+	const data = () => {
+		const json = BTOdata;
+		return <GeoJSON 
+					data = {json}
+					onEachFeature = {this.onEachFeature} />
+	}
+
+		if (this.props.shouldReset) {
+			console.log("shouldReset");
+			this.handleReset();
+			this.props.resetClosure();
+		}
+
+		const { center, zoom, maxBounds, maxZoom, minZoom } = this.state;
+
 		return (
 		<div>
-			<Map id="mapid"
+			{/* Must have id="mapid" */}
+			<Map ref= {this.mapRef} id="mapid"
 				center = {center}
 				zoom = {zoom}
 				animate={true}
+				maxBounds={maxBounds}
+				maxZoom={maxZoom}
+				minZoom={minZoom}
+				onClick = {this.handleClick}
+				onLocationfound = {this.handleLocationFound}
 				>
+
+
 			<TileLayer 
 				attribution = "Input value in TileLayer: Attribution"
 				url = {CARTO_BASEMAP} />
-				<BusLayer style={style} client={client} hidden={false}/>
-				<District style = {style} clien ={client} hidden = {false}/>
+				{/* <BusLayer style={style} client={client} hidden={true}/> */}
 			{/* <LayerSQL source={sourceBus} style={style} hidden={false} client={client}/> */}
 				{/* <Layer source={sourceMRT} style={} hidden={false} client={client}/>
 				<Layer source={sourceHawker} style={} hidden={false} client={client}/>
 				<Layer source={sourceSchool} style={} hidden={false} client={client}/>
 				<Layer source={sourceShopping} style={} hidden={false} client={client}/> */}
+			
+				
+			
+
+			{/* <Overlay checked name = "test"> */}
+			<LayerGroup>
+				{data()}
+			</ LayerGroup>
+			{/* <LayerGroup>
+			<BTOLayer style={BTOstyle} client={client} hidden={false}/>
+			</ LayerGroup> */}
+			{/* </ Overlay> */}
+			<Marker position = {center}>
+				<Popup> Test test <br /> hello </Popup>
+			</Marker>
 			</Map>	
 		</div>
 		);

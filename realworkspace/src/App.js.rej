@@ -1,0 +1,18 @@
+diff a/realworkspace/src/App.js b/realworkspace/src/App.js	(rejected hunks)
+@@ -17,9 +17,14 @@
+             <NavCol>
+               <CheckBoxes/>
+               </NavCol>
+-            {/* <Map/> */}
++          <div className = "mapid">
++            <Map/>
++          </div>
+         </div>
++
+       </div>
+     );
+   }
+ }
++
++export default App;
+\ No newline at end of file

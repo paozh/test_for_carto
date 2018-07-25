@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import carto from '@carto/carto.js';
-import 'leaflet';
 
 class BusLayer extends Component {
   static contextTypes = {
@@ -19,7 +18,7 @@ class BusLayer extends Component {
     super(props);
 
     const { client, hidden, style } = props;
-    const SQLquery = 'SELECT the_geom, name, distance_to_yishun_west FROM busstop_most_updated WHERE distance_to_yishun_west < 2000 ';
+    const SQLquery = 'SELECT * FROM busstop_most_updated';
     const cartoSource = new carto.source.SQL(SQLquery);
     const cartoStyle = new carto.style.CartoCSS(style);
 
@@ -30,7 +29,7 @@ class BusLayer extends Component {
   componentDidMount() {
     const { client } = this.props;
     client.addLayer(this.layer);
-    //client.getLeafletLayer().addTo(this.context.map);
+    client.getLeafletLayer().addTo(this.context.map);
   }
 
   shouldComponentUpdate(nextProps) {
