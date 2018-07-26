@@ -33,24 +33,48 @@ class BTOLayer extends Component {
 
   componentDidMount() {
     const { client } = this.props;
-    console.log(client.getLeafletLayer);
+    console.log(this.props);
 
     // this.layer.on('featureClick',function(e,latlng, pos, data, subLayerIndex){
     //   console.log('test' + data);
     // })
+   // this.layer.trigger('featureClick', null, latlng, null, { cartodb_id: row.properties.cartodb_id }, 0);
+
+    // client.addLayer(this.layer);
+    
+    // client.getLeafletLayer().addTo(this.context.map);
+    // console.log(client.getLayers());
 
     client.addLayer(this.layer);
-    client.getLeafletLayer().addTo(this.context.map).on('done', function(layer){
-      layer.getSubLayer(0).setInteraction(true);
-      layer.getSubLayer(0).setInteractivity('cartodb_id');
 
-      layer.on('featureClick',function(e,latlng, pos, data, subLayerIndex){
-        console.log('test' + data);
-      })
+    client.getLeafletLayer().addTo(this.context.map)
+    .on('done', function(layer) {
+      layer
+        .on('featureClick', function(e, latlng, pos, data) {
+          console.log(e, latlng, pos, data);
+        })
+        .on('error', function(err) {
+          console.log('error: ' + err);
+        });
+    }).on('error', function(err) {
+      console.log("some error occurred: " + err);
     });
+    // client.getLeafletLayer().addTo(this.context.map).on('done', function(layer){
+    //   layer.getSubLayer(0).setInteraction(true);
+    //   layer.getSubLayer(0).setInteractivity('cartodb_id');
+
+    //   layer.on('featureClick',function(e,latlng, pos, data, subLayerIndex){
+    //     console.log('test' + data);
+    //   })
+    // });
     }
-
-
+    onEachFeature = (feature, layer) => {
+      layer.bindPopup(feature.properties.name);
+      layer.on('click', function (e) {
+        console.log(e);
+      })
+    }
+    
     
     // const popup = L.popup({closeButton:false});
     // this.layer.on(carto.layer.events.FEATURE_OVER, featureEvent => {
@@ -96,5 +120,6 @@ class BTOLayer extends Component {
     return null;
   }
 }
+
 
 export default BTOLayer;
