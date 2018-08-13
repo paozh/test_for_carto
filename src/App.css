@@ -1,0 +1,33 @@
+.App {
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    margin: 0;
+}
+
+.content-fixed {
+    height: 50px;
+}
+
+.content-r {
+    position: absolute;
+    width: 100%;
+    top: 50px;
+    bottom: 0px;
+}
+
+.navPage {
+    position:float;
+    width:100%;
+    top: 100px;
+}
+
+.content-TS{
+    position:absolute;
+    top: 750px;
+}
+
+.content-TS4{
+    position: absolute;
+    left: 1050px;
+}
