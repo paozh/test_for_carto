@@ -19,7 +19,7 @@ class TimeSeries_3room extends Component {
         margin={{top: 30, right: 30, left: 20, bottom: 5}}>>
                 
                 <XAxis dataKey = "financial_year" type = "category" allowDuplicatedCategory={false} />
-                <YAxis domain = {'dataMin', 'dataMax'} label = {{value: 'Cost of BTO ($)', position: 'left', angle: -90, offset: 10}}/>
+                <YAxis domain = {['dataMin', 'dataMax']} label = {{value: 'Cost of BTO ($)', position: 'left', angle: -90, offset: 10}}/>
                 <Tooltip/>
                 <CartesianGrid strokeDasharray="3 3"/>
                 <Legend verticalAlign = "bottom"/>
